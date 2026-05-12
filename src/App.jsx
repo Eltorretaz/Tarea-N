@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   BookOpen,
   Building2,
@@ -13,73 +13,11 @@ import {
   Briefcase,
   Scale,
   CreditCard,
-  Landmark,
-  Sparkles,
-  Loader2,
-  AlertCircle
+  Landmark
 } from 'lucide-react';
 
 const App = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [aiInput, setAiInput] = useState('');
-  const [aiResponse, setAiResponse] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  // Configuración de la API de Gemini
-  const apiKey = "AIzaSyBbDi5hB8hYIv6jCMrJK8Dbi-g-Kmpm5wo"
-  const model = "gemini-2.5-flash-preview-09-2025";
-
-  // Función de llamada a la API con Exponential Backoff (MANDATORIO)
-  const callGemini = async (prompt, systemPrompt) => {
-    setIsLoading(true);
-    setError(null);
-    let retries = 0;
-    const maxRetries = 5;
-
-    while (retries <= maxRetries) {
-      try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            systemInstruction: { parts: [{ text: systemPrompt }] }
-          })
-        });
-
-        if (!response.ok) throw new Error('Error en la comunicación con la IA');
-
-        const data = await response.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        setIsLoading(false);
-        return text;
-      } catch (err) {
-        if (retries === maxRetries) {
-          setError("No se pudo conectar con el asistente legal. Por favor, intenta más tarde.");
-          setIsLoading(false);
-          return null;
-        }
-        const delay = Math.pow(2, retries) * 1000;
-        await new Promise(resolve => setTimeout(resolve, delay));
-        retries++;
-      }
-    }
-  };
-
-  const handleConsultancy = async () => {
-    if (!aiInput.trim()) return;
-   
-    const systemPrompt = `Eres un experto abogado mercantil venezolano.
-    Analiza la idea de negocio del usuario y determina si le conviene:
-    1. Ruta de Emprendimiento (Ley de Fomento 2021) para ideas nuevas/validación.
-    2. Empresa Tradicional (Código de Comercio) para negocios maduros o mayor capital.
-    Explica por qué basándote en la ley venezolana y sugiere un borrador de 'Objeto Social' formal.
-    Responde en formato Markdown, sé profesional y didáctico. Usa términos del Código de Comercio de Venezuela.`;
-   
-    const result = await callGemini(`Mi idea de negocio es: ${aiInput}`, systemPrompt);
-    if (result) setAiResponse(result);
-  };
 
   const slides = [
     {
@@ -151,13 +89,6 @@ const App = () => {
       icon: <FileText className="w-12 h-12 text-blue-700" />
     },
     {
-      type: 'ai-tool',
-      title: "Consultoría Legal con IA ✨",
-      subtitle: "Define tu ruta legal en segundos",
-      description: "Escribe tu idea de negocio y nuestra IA entrenada en leyes venezolanas te asesorará sobre la mejor ruta de registro.",
-      icon: <Sparkles className="w-12 h-12 text-indigo-600" />
-    },
-    {
       type: 'entities',
       title: "Entes y Relación Mercantil Post-Registro",
       entities: [
@@ -204,7 +135,7 @@ const App = () => {
         {/* Content Area */}
         <div className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto max-h-none md:max-h-[550px]">
           {slide.type === 'title' && (
-            <div className="text-center space-y-6 animate-in fade-in duration-700">
+            <div className="text-center space-y-6">
               <div className="flex justify-center mb-4">{slide.icon}</div>
               <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight">
                 {slide.title}
@@ -219,7 +150,7 @@ const App = () => {
           )}
 
           {slide.type === 'section' && (
-            <div className="grid md:grid-cols-2 gap-4 md:gap-8 items-center animate-in slide-in-from-right duration-500">
+            <div className="grid md:grid-cols-2 gap-4 md:gap-8 items-center">
               <div className="space-y-4">
                 <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold uppercase tracking-widest">
                   {slide.category}
@@ -246,7 +177,7 @@ const App = () => {
           )}
 
           {slide.type === 'steps' && (
-            <div className="space-y-8 animate-in slide-in-from-bottom duration-500">
+            <div className="space-y-8">
               <div className="flex items-center gap-4">
                 {slide.icon}
                 <h2 className="text-2xl md:text-3xl font-bold">{slide.title}</h2>
@@ -287,55 +218,8 @@ const App = () => {
             </div>
           )}
 
-          {slide.type === 'ai-tool' && (
-            <div className="space-y-6 animate-in zoom-in duration-500">
-              <div className="flex items-center gap-4">
-                {slide.icon}
-                <div>
-                  <h2 className="text-3xl font-bold">{slide.title}</h2>
-                  <p className="text-indigo-600 font-medium">{slide.subtitle}</p>
-                </div>
-              </div>
-             
-              <div className="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 space-y-4">
-                <p className="text-sm text-slate-700">{slide.description}</p>
-                <textarea
-                  className="w-full p-4 rounded-xl border border-indigo-200 focus:ring-2 focus:ring-indigo-500 outline-none text-sm h-24"
-                  placeholder="Ej: Quiero abrir una pastelería artesanal desde mi casa con dos socios..."
-                  value={aiInput}
-                  onChange={(e) => setAiInput(e.target.value)}
-                />
-                <button
-                  onClick={handleConsultancy}
-                  disabled={isLoading || !aiInput.trim()}
-                  className="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-700 transition-colors disabled:opacity-50"
-                >
-                  {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
-                  Analizar mi Ruta ✨
-                </button>
-              </div>
-
-              {error && (
-                <div className="flex items-center gap-2 p-3 bg-red-50 text-red-700 rounded-lg text-sm border border-red-100">
-                  <AlertCircle className="w-4 h-4" /> {error}
-                </div>
-              )}
-
-              {aiResponse && (
-                <div className="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm animate-in slide-in-from-top duration-300">
-                  <h4 className="font-bold text-slate-800 mb-2 border-b pb-2 flex items-center gap-2">
-                    <Gavel className="w-4 h-4 text-indigo-600" /> Recomendación Legal
-                  </h4>
-                  <div className="text-sm text-slate-700 whitespace-pre-wrap prose prose-slate">
-                    {aiResponse}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
           {slide.type === 'entities' && (
-            <div className="space-y-6 animate-in fade-in duration-500">
+            <div className="space-y-6">
               <div className="flex items-center gap-4">
                 {slide.icon}
                 <h2 className="text-3xl font-bold">{slide.title}</h2>
@@ -361,7 +245,7 @@ const App = () => {
           )}
 
           {slide.type === 'legal' && (
-            <div className="space-y-8 animate-in slide-in-from-left duration-500">
+            <div className="space-y-8">
               <div className="flex items-center gap-4">
                 {slide.icon}
                 <h2 className="text-3xl font-bold">{slide.title}</h2>
@@ -416,7 +300,7 @@ const App = () => {
         <span className="hidden md:inline text-slate-300">|</span>
         <div className="flex items-center gap-1">
           <Scale className="w-3 h-3 md:w-4 md:h-4" />
-          <span>Impulsado por Gemini AI ✨</span>
+          <span>Guía de Formalización Mercantil</span>
         </div>
       </footer>
     </div>
