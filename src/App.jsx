@@ -27,7 +27,7 @@ const App = () => {
   const [error, setError] = useState(null);
 
   // Configuración de la API de Gemini
-  const apiKey = "AIzaSyBgidu6z0ix0YToOsKUeBdm5ECwLL4Cll8"
+  const apiKey = "AIzaSyBbDi5hB8hYIv6jCMrJK8Dbi-g-Kmpm5wo"
   const model = "gemini-2.5-flash-preview-09-2025";
 
   // Función de llamada a la API con Exponential Backoff (MANDATORIO)
@@ -230,7 +230,7 @@ const App = () => {
                 <p className="text-slate-600 italic border-l-4 border-blue-600 pl-4">
                   {slide.description}
                 </p>
-                <ul className="space-y-3 mt-6">
+                <ul className="space-y-3 mt-6">AIzaSyBbDi5hB8hYIv6jCMrJK8Dbi-g-Kmpm5wo
                   {slide.points.map((p, i) => (
                     <li key={i} className="flex items-start gap-2">
                       <CheckCircle2 className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
