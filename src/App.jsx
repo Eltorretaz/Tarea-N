@@ -27,7 +27,7 @@ const App = () => {
   const [error, setError] = useState(null);
 
   // Configuración de la API de Gemini
-  const apiKey = ""; AIzaSyBgidu6z0ix0YToOsKUeBdm5ECwLL4Cll8
+  const apiKey = "AIzaSyBgidu6z0ix0YToOsKUeBdm5ECwLL4Cll8"
   const model = "gemini-2.5-flash-preview-09-2025";
 
   // Función de llamada a la API con Exponential Backoff (MANDATORIO)
