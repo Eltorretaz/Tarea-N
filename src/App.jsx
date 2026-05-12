@@ -190,7 +190,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 font-sans text-slate-900">
       {/* Container */}
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-200 min-h-[650px] flex flex-col">
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-200 min-h-[450px] md:min-h-[650px] flex flex-col">
        
         {/* Header / Progress */}
         <div className="bg-slate-900 p-4 flex justify-between items-center text-white">
@@ -202,35 +202,35 @@ const App = () => {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 p-8 md:p-12 overflow-y-auto max-h-[550px]">
+        <div className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto max-h-none md:max-h-[550px]">
           {slide.type === 'title' && (
             <div className="text-center space-y-6 animate-in fade-in duration-700">
               <div className="flex justify-center mb-4">{slide.icon}</div>
-              <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight">
                 {slide.title}
               </h1>
-              <p className="text-xl text-blue-600 font-medium">{slide.subtitle}</p>
+              <p className="text-base md:text-xl text-blue-600 font-medium">{slide.subtitle}</p>
               <div className="h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
               <p className="text-slate-600 max-w-lg mx-auto">{slide.content}</p>
-              <div className="mt-8 rounded-xl overflow-hidden shadow-lg h-48 w-full bg-slate-200">
+              <div className="mt-6 md:mt-8 rounded-xl overflow-hidden shadow-lg h-32 md:h-48 w-full bg-slate-200">
                 <img src={slide.image} alt="Background" className="w-full h-full object-cover opacity-80" />
               </div>
             </div>
           )}
 
           {slide.type === 'section' && (
-            <div className="grid md:grid-cols-2 gap-8 items-center animate-in slide-in-from-right duration-500">
+            <div className="grid md:grid-cols-2 gap-4 md:gap-8 items-center animate-in slide-in-from-right duration-500">
               <div className="space-y-4">
                 <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold uppercase tracking-widest">
                   {slide.category}
                 </div>
-                <h2 className="text-3xl font-bold flex items-center gap-3">
+                <h2 className="text-2xl md:text-3xl font-bold flex items-center gap-3">
                   {slide.icon} {slide.title}
                 </h2>
                 <p className="text-slate-600 italic border-l-4 border-blue-600 pl-4">
                   {slide.description}
                 </p>
-                <ul className="space-y-3 mt-6">AIzaSyBbDi5hB8hYIv6jCMrJK8Dbi-g-Kmpm5wo
+                <ul className="space-y-3 mt-6">
                   {slide.points.map((p, i) => (
                     <li key={i} className="flex items-start gap-2">
                       <CheckCircle2 className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
@@ -239,7 +239,7 @@ const App = () => {
                   ))}
                 </ul>
               </div>
-              <div className="rounded-2xl overflow-hidden shadow-xl aspect-square">
+              <div className="rounded-2xl overflow-hidden shadow-xl aspect-video md:aspect-square">
                 <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
               </div>
             </div>
@@ -249,9 +249,9 @@ const App = () => {
             <div className="space-y-8 animate-in slide-in-from-bottom duration-500">
               <div className="flex items-center gap-4">
                 {slide.icon}
-                <h2 className="text-3xl font-bold">{slide.title}</h2>
+                <h2 className="text-2xl md:text-3xl font-bold">{slide.title}</h2>
               </div>
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {slide.steps.map((s, i) => (
                   <div key={i} className="bg-slate-50 p-5 rounded-xl border border-slate-200 hover:shadow-md transition-shadow">
                     <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mb-3">
@@ -340,7 +340,7 @@ const App = () => {
                 {slide.icon}
                 <h2 className="text-3xl font-bold">{slide.title}</h2>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 {slide.entities.map((e, i) => (
                   <div key={i} className="p-4 border rounded-xl flex flex-col items-center text-center space-y-2 hover:bg-slate-50 transition-colors">
                     {e.icon}
@@ -384,13 +384,13 @@ const App = () => {
         </div>
 
         {/* Footer Navigation */}
-        <div className="p-6 bg-slate-50 border-t border-slate-200 flex justify-between items-center">
-          <button
-            onClick={prev}
-            className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:text-blue-700 font-semibold transition-colors disabled:opacity-30"
-            disabled={currentSlide === 0}
-          >
-            <ArrowLeft className="w-5 h-5" /> Anterior
+        <div className="p-3 md:p-6 bg-slate-50 border-t border-slate-200 flex justify-between items-center">
+            <button
+              onClick={prev}
+              className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 text-slate-600 hover:text-blue-700 font-semibold transition-colors disabled:opacity-30 text-sm md:text-base"
+              disabled={currentSlide === 0}
+            >
+              <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" /> Anterior
           </button>
          
           <div className="flex gap-2">
@@ -404,18 +404,18 @@ const App = () => {
 
           <button
             onClick={next}
-            className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold shadow-md transition-all active:scale-95"
+            className="flex items-center gap-1 md:gap-2 px-4 md:px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold shadow-md transition-all active:scale-95 text-sm md:text-base"
           >
-            {currentSlide === slides.length - 1 ? 'Reiniciar' : 'Siguiente'} <ArrowRight className="w-5 h-5" />
+            {currentSlide === slides.length - 1 ? 'Reiniciar' : 'Siguiente'} <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
           </button>
         </div>
       </div>
 
-      <footer className="mt-8 text-slate-500 text-sm flex items-center gap-4">
+      <footer className="mt-6 md:mt-8 text-slate-500 text-xs md:text-sm flex flex-col md:flex-row items-center gap-2 md:gap-4 px-4 text-center">
         <p>© 2024 Guía de Formalización Mercantil Venezolana</p>
-        <span className="text-slate-300">|</span>
+        <span className="hidden md:inline text-slate-300">|</span>
         <div className="flex items-center gap-1">
-          <Scale className="w-4 h-4" />
+          <Scale className="w-3 h-3 md:w-4 md:h-4" />
           <span>Impulsado por Gemini AI ✨</span>
         </div>
       </footer>
